@@ -15,10 +15,24 @@ export * from './hit-test.js'
 export * from './anchor.js'
 export * from './dom-overlay.js'
 export * from './layer.js'
+export * from './cube-layer.js'
 export * from './controller-locomotion.js'
 export * from './events.js'
 
 //react-three/xr v5 compatibility layer
 export * from './deprecated/index.js'
 
-export { isAppleVisionPro } from '@pmndrs/xr'
+export {
+  isAppleVisionPro,
+  // Cubemap utilities
+  splitHorizontalCross,
+  splitCubeStrip,
+  loadCubeFaces,
+  loadImage,
+  imagesToBitmaps,
+  isHorizontalCross,
+  isCubeStrip,
+  getFaceSizeFromCross,
+  CUBE_FACE_ORDER,
+  type CubeFace,
+} from '@pmndrs/xr'

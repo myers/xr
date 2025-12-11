@@ -13,6 +13,7 @@ import {
   XRLayerEntry,
   XRLayerOptions,
   XRLayerSrc,
+  XRTransformLayer,
 } from '@pmndrs/xr'
 import {
   addEffect,
@@ -40,6 +41,7 @@ import {
   BufferGeometry,
   Mesh,
   MeshBasicMaterial,
+  Object3D,
   OrthographicCamera,
   PerspectiveCamera,
   Raycaster,
@@ -53,6 +55,13 @@ import {
 import { create, StoreApi, UseBoundStore } from 'zustand'
 import { useXRSessionFeatureEnabled } from './hooks.js'
 import { useXR, useXRStore } from './xr.js'
+
+/** Layer entry type specific to non-cube layers (used by XRLayer component) */
+type TransformLayerEntry = {
+  renderOrder: number
+  readonly layer: XRTransformLayer
+  readonly object3D: Object3D
+}
 
 export type XRLayerProperties = XRLayerOptions &
   XRLayerDynamicProperties &
@@ -93,7 +102,7 @@ export function XRLayer({
   const [hasSize, setHasSize] = useState(false)
   const ref = useRef<Mesh>(null)
   const renderTargetRef = useRef<WebGLRenderTarget | undefined>(undefined)
-  const layerEntryRef = useRef<XRLayerEntry | undefined>(undefined)
+  const layerEntryRef = useRef<TransformLayerEntry | undefined>(undefined)
   useEffect(() => {
     setHasSize(false)
     let aborted = false
@@ -166,7 +175,7 @@ export const XRLayerImplementation = forwardRef<
     pixelHeight: number
     dpr: number
     renderTargetRef: MutableRefObject<WebGLRenderTarget | undefined | null>
-    layerEntryRef: MutableRefObject<XRLayerEntry | undefined | null>
+    layerEntryRef: MutableRefObject<TransformLayerEntry | undefined | null>
   }
 >(
   (
@@ -494,7 +503,7 @@ function ChildrenToRenderTarget({
 }: {
   renderPriority: number
   children: ReactNode
-  layerEntryRef: RefObject<XRLayerEntry | undefined | null> | undefined
+  layerEntryRef: RefObject<TransformLayerEntry | undefined | null> | undefined
   renderTargetRef: RefObject<WebGLRenderTarget | undefined | null>
   store: UseBoundStore<StoreApi<RootState>>
   customRender?: (target: WebGLRenderTarget, state: RootState, delta: number, frame: XRFrame | undefined) => void

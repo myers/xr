@@ -20,9 +20,12 @@ import { getSpaceFromAncestors } from './space.js'
 import { XRState, XRStore } from './store.js'
 import { nanToDefault, toDOMPointInit } from './utils.js'
 
+/** Non-cube XR layer types that support transform and shape properties */
+export type XRTransformLayer = XRCylinderLayer | XRQuadLayer | XREquirectLayer
+
 export type XRLayerEntry = {
   renderOrder: number
-  readonly layer: XRCylinderLayer | XRQuadLayer | XREquirectLayer
+  readonly layer: XRTransformLayer | XRCubeLayer
   readonly object3D: Object3D
 }
 

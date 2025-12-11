@@ -1,4 +1,4 @@
-import { BufferGeometry, Mesh, MeshBasicMaterial, WebGLRenderer, WebGLRenderTarget } from 'three'
+import { BufferGeometry, Mesh, MeshBasicMaterial, Object3D, WebGLRenderer, WebGLRenderTarget } from 'three'
 import {
   createXRLayer,
   createXRLayerGeometry,
@@ -7,15 +7,22 @@ import {
   updateXRLayerProperties,
   updateXRLayerTransform,
   waitForXRLayerSrcSize,
-  XRLayerEntry,
   XRLayerOptions,
   XRLayerProperties,
   XRLayerSrc,
+  XRTransformLayer,
 } from '../layer.js'
 import { XRState, XRStore } from '../store.js'
 
+/** Layer entry type specific to non-cube layers (used by vanilla XRLayer class) */
+type TransformLayerEntry = {
+  renderOrder: number
+  readonly layer: XRTransformLayer
+  readonly object3D: Object3D
+}
+
 export class XRLayer extends Mesh<BufferGeometry, MeshBasicMaterial> {
-  private layerEntry?: XRLayerEntry
+  private layerEntry?: TransformLayerEntry
   private cleanup?: () => void
   private cleanupSubscription?: () => void
 
